@@ -1,24 +1,18 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "text/html; charset=utf-8"
-        },
-        {
-          "key": "Content-Disposition",
-          "value": "inline"
-        }
-      ]
+  "functions": {
+    "api/render.js": {
+      "includeFiles": "index.html"
     }
-  ],
+  },
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "source": "/",
+      "destination": "/api/render"
+    },
+    {
+      "source": "/index.html",
+      "destination": "/api/render"
     }
   ]
 }
