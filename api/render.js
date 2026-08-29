@@ -1,14 +1,22 @@
 const fs = require("node:fs");
 const path = require("node:path");
 
+function repairUtf8Mojibake(value) {
+  return value
+    .replace(/(?:Ã.|Â.|â..)/g, (sequence) =>
+      Buffer.from(sequence, "latin1").toString("utf8")
+    )
+    .replace(/\u00b7/g, "\u2022");
+}
+
 module.exports = function renderCorrectedIndex(request, response) {
   const indexPath = path.join(process.cwd(), "index.html");
   let html = fs.readFileSync(indexPath, "utf8");
 
-  // Normalize separators affected by an earlier character-encoding conversion.
-  html = html.replace(/\u00c2\u00b7/g, "\u2022");
+  // Repair every common UTF-8 sequence previously decoded as Windows-1252.
+  html = repairUtf8Mojibake(html);
 
-  // Use the same dependable system typography throughout the complete model.
+  // Use dependable system typography throughout the complete model.
   const typography = `<style id="doc-roi-system-typography">
     html, body, button, input, select, textarea {
       font-family: Arial, Helvetica, sans-serif !important;
