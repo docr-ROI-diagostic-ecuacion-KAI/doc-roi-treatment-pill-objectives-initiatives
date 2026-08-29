@@ -5,14 +5,17 @@
       "includeFiles": "index.html"
     }
   },
-  "rewrites": [
+  "routes": [
     {
-      "source": "/",
-      "destination": "/api/render"
+      "src": "^/$",
+      "dest": "/api/render.js"
     },
     {
-      "source": "/index.html",
-      "destination": "/api/render"
+      "src": "^/index\\.html$",
+      "dest": "/api/render.js"
+    },
+    {
+      "handle": "filesystem"
     }
   ]
 }
